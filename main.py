@@ -2,6 +2,7 @@ import numpy as np
 import gym 
 import random
 import time
+from os import system
 
 env = gym.make("FrozenLake-v0")
 
@@ -21,6 +22,8 @@ num_episode = 10000
 max_step_per_episode = 300
 
 rewards_all_episodes = []
+
+print("Traning...")
 
 for episode in range(num_episode):
     state = env.reset()
@@ -52,3 +55,30 @@ for r in rewards_per_thosand_episodes:
 
 print("\nQ-table")
 print(q_table)
+
+print("Playing n games...")
+for game in range(5):
+    ate = env.reset()
+    done = False
+    print("Game ", game + 1, "\n")
+    time.sleep(0.5)
+    for step in range(max_step_per_episode):
+        system('clear')
+        env.render()
+        time.sleep(0.2)
+        action = np.argmax(q_table[state,:])
+        new_state, reward, done, info = env.step(action)
+        if done:
+            system('clear')
+            env.render()
+            if reward == 1:
+                print("Victory")
+                time.sleep(0.5)
+            else:
+                print("You've lost")
+                time.sleep(0.5)
+            system('clear')
+            break
+        state = new_state
+
+env.close()
